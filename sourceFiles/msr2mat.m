@@ -1,54 +1,50 @@
-function [mnm] = msr2mat(fs_dsp)
+function [mname] = msr2mat(fs_dsp)
 %MWMSR2MAT myway measurement data to single mat-file
 %   [mnm] = msr2mat(fs_dsp)
 % fs_dsp : sampling freq of dsp controller [Hz]
 % mnm    : name of created data mat-file [string]
 % author : Thomas Beauduin, University of Tokyo, 2015
-%%%%%
 
+W=[]; T=[]; R=[]; P=[]; A=[];
 % WAVE MSR DATA
-data_c = []; data_n = [];
+% extract wave data file from current folder (W*.csv)
 wcsv = dir(strcat(pwd,'\','W*.csv'));
 if exist(wcsv.name,'file') ~= 0
-    [msr,mnm] = mwcsv2struct(strcat(pwd,'\',wcsv.name),fs_dsp);
-    data_c = [data_c; struct2cell(msr)];
-    data_n = [data_n; fieldnames(msr)];
+    [W,mname] = mwcsv2struct(strcat(pwd,'\',wcsv.name),fs_dsp);
 end
 
 % TRC MSR DATA
+% extract trace data file from current folder (T*.csv)
 tcsv = dir(strcat(pwd,'\','T*.csv'));
 if exist(tcsv.name,'file') ~= 0
-    [trc,tnm] = mwtrc2struct(strcat(pwd,'\',tcsv.name));
-    data_c = [data_c; struct2cell(trc)];
-    data_n = [data_n; fieldnames(trc)];
+    [T,tname] = mwtrc2struct(strcat(pwd,'\',tcsv.name));
 end
 
 % REF HDR DATA
+% extract reference data file from current folder (R*.hdr)
 rhdr = dir(strcat(pwd,'\','R*.h'));
 if exist(rhdr.name,'file') ~= 0
-    [ref,rnm] = mwref2struct(strcat(pwd,'\',rhdr.name));
-    data_c = [data_c; struct2cell(ref)];
-    data_n = [data_n; fieldnames(ref)];
+    [R,rname] = mwref2struct(strcat(pwd,'\',rhdr.name));
 end
 
 % EXP PAR DATA
+% extract parameters data file from current folder (P*.mat)
 pmat = dir(strcat(pwd,'\','P*.mat'));
 if exist(pmat.name,'file') ~= 0
-    par = load(strcat(pwd,'\',pmat.name));
-    data_c = [data_c; struct2cell(par)];
-    data_n = [data_n; fieldnames(par)];
+    P = load(strcat(pwd,'\',pmat.name));
 end
 
 % ACC MSR DATA
+% extract nvgate data file from current folder (A*.txt)
 atxt =  dir(strcat(pwd,'\','A*.txt'));
 if exist(atxt.name,'file') ~= 0
-    [acc,anm] = nvacc2struct(strcat(pwd,'\',atxt.name));
-    data_c = [data_c; struct2cell(acc)];
-    data_n = [data_n; fieldnames(acc)];
+    [A,anm] = nvacc2struct(strcat(pwd,'\',atxt.name));
 end
 
-% DAT
-data_s = cell2struct(data_c,data_n,1);
-save(mnm, '-struct','data_s');
+% MERGE DATA
+% concatenate all structures into single file (D*.mat)
+S = mergestruct(W,T,R,P,A);
+save(mname,'-struct','S');
 
 end
+
