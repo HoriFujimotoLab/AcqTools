@@ -1,7 +1,7 @@
 function Y = mergestruct(varargin)
 % MERGESTRUCT - merge multiple different structures.
 %       X = CATSTRUCT(S1,S2,S3,...) 
-% Sx    : fields to concatenate
+% Sx    : structures to concatenate
 % A     : structure with merged fields
 % note  : if a fieldname is not unique among structures, 
 %         only value from last structure with this field is used.
