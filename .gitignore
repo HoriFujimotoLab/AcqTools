@@ -1,0 +1,40 @@
+### FigTools Specific
+*.pdf           # Generated figure folders
+*.eps
+*.png
+*.bmp
+
+### Matlab
+*.asv						# Windows default autosave
+*.mex*					# Compiled MEX binaries
+slprj/					# Simulink Code Generation
+
+### Embedded Source
+*.asm						# assembly files
+*.lst 					# masm c-compile listing
+*.obj 					# compiled modules object
+*.sql 					# sql database file
+*.sdf						# sql database file
+*.sln 					# visual studio solution
+
+### Compiled source
+*.com 					# simple executable file
+*.class					# java class file
+*.dll 					# Dynamic Link Library
+*.exe						# executable file
+*.log						# loging text file
+
+### Packages
+*.7z						# 7-zip compressed file
+*.iso						# disk image binary file
+*.rar						# rar compressed achive
+*.tar						# file collection type
+*.zip						# file compression type
+
+### OS generated files
+*.cab						# Windows Installer files
+*.msi						# Windows Installer files
+*.msm						# Windows merge modules
+*.msp						# Windows deploy patch
+*.lnk						# Windows shortcuts
+._*							# Thumbnails
