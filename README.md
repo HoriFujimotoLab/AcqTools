@@ -11,7 +11,7 @@ Keeping track of experimental parameters, references, data etc. of measurements 
 
 All subtoolboxes are based on the main principal; a single user-command to combine the data of several sources (measurment, reference, ...) to be called with the concerned data files in the same folder (pwd). The user-command searches the folder for the different files and merges the data into a single mat-file. To simplify the process, the search process is based on a naming convention for the different files based on the first letter of the file-name (written in UpperCase).
 
-# Filenames & Extensions
+### Filenames & Extensions
 
 1. **Dspace**
    * **D*.mat** : Dspace data mat-file
