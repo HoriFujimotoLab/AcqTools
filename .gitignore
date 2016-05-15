@@ -1,8 +1,4 @@
-### FigTools Specific
-*.pdf           # Generated figure folders
-*.eps
-*.png
-*.bmp
+### AcqTools Specific
 
 ### Matlab
 *.asv						# Windows default autosave
