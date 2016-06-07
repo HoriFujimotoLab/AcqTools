@@ -1,4 +1,4 @@
-function [mname] = msr2mat(fs_dsp)
+function [mname] = myway2mat(fs_dsp)
 %MWMSR2MAT myway measurement data to single mat-file
 %   [mnm] = msr2mat(fs_dsp)
 % fs_dsp : sampling freq of dsp controller [Hz]
