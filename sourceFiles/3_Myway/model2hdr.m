@@ -1,4 +1,4 @@
-function [path] = mdl2hdr(file, title, header, model)
+function [path] = model2hdr(file, title, header, model)
 %MDL2HDR System model export to MyWay C# header-file.
 % [path] = mdl2hdr(file, title, header, model)
 % file      : header-file name      (string)
