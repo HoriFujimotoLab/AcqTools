@@ -31,5 +31,5 @@ end
 fprintf(fid,'}; \n');
 fclose(fid);
 
-path = strcat(pwd,'\',file);
+path = strcat(folder,'\',file);
 end

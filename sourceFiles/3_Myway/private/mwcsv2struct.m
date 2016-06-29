@@ -64,26 +64,23 @@ for i=1:nroft
     end
 end
 
-for i=1:nroft
-    if DATA{idx}(i) < cnt_m(i)  % shift left
-        for d=2:length(HDRS)
+for d=2:length(HDRS)
+    for i=1:nroft
+        if DATA{idx}(i) < cnt_m(i)      % shift left
             DATA{d}=[DATA{d}(1:i-1);DATA{d}(i+1:end)];
         end
-    end
-    if DATA{idx}(i) > cnt_m(i)  % shift right
-        for d=2:length(HDRS)
-            if srate == 1       % interpolate
+        if DATA{idx}(i) > cnt_m(i)      % shift right
+            if srate == 1               % interpolate
                 DATA{d}=[DATA{d}(1:i-1);mean([DATA{d}(i-1),DATA{d}(i)]);DATA{d}(i:end)];
-            else                % replace data
+            else                        % replace data
                 DATA{d}=[DATA{d}(1:i-1);DATA{d}(i-1);DATA{d}(i:end)];
             end
         end
     end
+    DATA{d}=DATA{d}(1:nroft);           % remove fake data
 end
-for d=2:length(HDRS)            % remove fake data
-    DATA{d}=DATA{d}(1:nroft);
-end
-if srate == 2                   % downsample data
+
+if srate == 2                           % downsample data
     DATA_2 = cell(size(HDRS));      
     for d=1:length(HDRS)
         DATA_2{1,d}=zeros(nroft/2,1); k=1;
