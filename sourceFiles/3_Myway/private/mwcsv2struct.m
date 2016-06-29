@@ -33,7 +33,7 @@ for i = 1:length(HDRS)
     DATA{i} = cast(DATA{i}(1:nroft_wave),'double');
 end
 fs_wave = 1/((DATA{1}(2,1))*1e-6);
-nroft = ceil(nroft_wave-mod(fs_wave,fs_dsp)*nroft_wave/fs_wave);
+nroft = ceil(nroft_wave-mod(fs_wave,fs_dsp)*nroft_wave/fs_wave)
 srate = floor(fs_wave/fs_dsp);
 
 % TIME CORRECT
@@ -51,7 +51,8 @@ if DATA{idx}(1) ~= DATA{idx}(2)
         DATA{d}=[DATA{d}(1);DATA{d}(1:end)];
     end
 end
-k=DATA{idx}(1);
+k = DATA{idx}(1);
+DMSR = DATA{idx};
 
 % DATA CORRECT
 % remove data addition from fs error
@@ -66,18 +67,23 @@ end
 
 for d=2:length(HDRS)
     for i=1:nroft
-        if DATA{idx}(i) < cnt_m(i)      % shift left
+        if DATA{idx} < cnt_m(i)           % shift left
             DATA{d}=[DATA{d}(1:i-1);DATA{d}(i+1:end)];
+            DATA{idx}=[DATA{idx}(1:i-1);DATA{idx}(i+1:end)];
         end
-        if DATA{idx}(i) > cnt_m(i)      % shift right
+        if DATA{idx} > cnt_m(i)           % shift right
             if srate == 1               % interpolate
                 DATA{d}=[DATA{d}(1:i-1);mean([DATA{d}(i-1),DATA{d}(i)]);DATA{d}(i:end)];
+                DATA{idx}=[DATA{idx}(1:i-1);mean([DATA{idx}(i-1),DATA{idx}(i)]);DATA{idx}(i:end)];
             else                        % replace data
                 DATA{d}=[DATA{d}(1:i-1);DATA{d}(i-1);DATA{d}(i:end)];
+                DATA{d}=[DATA{idx}(1:i-1);DATA{idx}(i-1);DATA{idx}(i:end)];
             end
         end
     end
+    size(DATA{d})
     DATA{d}=DATA{d}(1:nroft);           % remove fake data
+    DATA{idx} = DMSR;
 end
 
 if srate == 2                           % downsample data
