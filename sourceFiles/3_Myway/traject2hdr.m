@@ -12,9 +12,11 @@ function [path] = traject2hdr(signal,folder,file)
 
 nrofs = size(signal,1);
 fid = fopen(strcat(folder,file),'w');
-name = strrep(file,'.h','');
-array_name = strrep(name,'R','');
-nrofs_name = upper(strrep(array_name,'ref',''));
+%name = strrep(file,'.h','');
+%array_name = strrep(name,'R','');
+%nrofs_name = upper(strrep(array_name,'ref',''));
+array_name = 'refvec';
+nrofs_name = 'NROFS';
 fprintf(fid,'#define %s %d \n', nrofs_name, nrofs);
 fprintf(fid,'far float %s [%s] = { \n',array_name,nrofs_name);
 
