@@ -11,10 +11,13 @@ function [path] = traject2hdr_ms(signal,folder,file,harm, Hampl, options)
 %             Hori-Fujimoto lab, 08 March 2015
 %%%%%
 fid = fopen(strcat(folder,file),'w');
+nrofs = size(signal,1);
+
 
 switch nargin
     case 6
-        fprintf(fid, '// CREST FACTOR = %f\n\n',max(abs(signal)));
+        fprintf(fid, '// CREST FACTOR = %f\n',max(abs(signal)));
+        fprintf(fid, '// SIGNAL LENGTH = %d [ms]\n\n',nrofs*1e3/harm.fs);
         fprintf(fid, '/* HARMONICS PARAMETERS \n');
         fprintf(fid, '** ----------------------- \n');
         fprintf(fid, '** fs = %f [Hz]: sampling frequency \n', harm.fs);
@@ -48,7 +51,6 @@ switch nargin
 end
 
 
-nrofs = size(signal,1);
 %name = strrep(file,'.h','');
 %array_name = strrep(name,'R','');
 %nrofs_name = upper(strrep(array_name,'ref',''));
