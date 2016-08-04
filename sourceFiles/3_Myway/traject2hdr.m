@@ -1,4 +1,4 @@
-function [path] = traject2hdr(signal,folder,file)
+function [path] = traject2hdr(signal,folder,file,array_name)
 %REF2HDR Export reference vector to c# myway header file.
 %   [path] = ref2hdr (type,signal,fname)
 % signal    : reference vector
@@ -10,12 +10,16 @@ function [path] = traject2hdr(signal,folder,file)
 %             Hori-Fujimoto lab, 08 March 2015
 %%%%%
 
+if nargin < 4
+    array_name = 'refvec';
+end
+
 nrofs = size(signal,1);
 fid = fopen(strcat(folder,file),'w');
 %name = strrep(file,'.h','');
 %array_name = strrep(name,'R','');
 %nrofs_name = upper(strrep(array_name,'ref',''));
-array_name = 'refvec';
+%array_name = 'refvec';
 nrofs_name = 'NROFS';
 fprintf(fid,'#define %s %d \n', nrofs_name, nrofs);
 fprintf(fid,'far float %s [%s] = { \n',array_name,nrofs_name);
