@@ -1,6 +1,6 @@
-function Ename = exp2mat(path)
-%EXP2MAT - Dspace experiment to single mat-file.
-%   Ename = exp2mat(path);
+function Ename = dspace2mat(path)
+%DSPACE2MAT - Dspace experiment to single mat-file.
+%
 % path  : folder path containing relevant files
 % Ename : name of the created data mat-file
 % Author: Thomas Beauduin, University of Tokyo, 2016

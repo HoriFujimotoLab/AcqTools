@@ -1,5 +1,5 @@
-function [mname] = labv2mat(varagin)
-%LABV2MAT Import data from labview experiment.
+function [mname] = labview2mat(varagin)
+%LABVIEW2MAT - Import data from labview experiment.
 %
 % Assembles all the data of a single experiment:
 %   - bin-file  : (R) reference signal/excitation
@@ -12,7 +12,7 @@ function [mname] = labv2mat(varagin)
 data_c = []; data_n = [];
 
 % Reference Signal (binary-file)
-rbin = dir(strcat(pwd,'\','R*.bin'))
+rbin = dir(strcat(pwd,'\','R*.bin'));
 if exist(rbin.name,'file') ~= 0
     fileID=fopen(rbin.name,'r');
     dini=fread(fileID,inf,'int8');
