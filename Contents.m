@@ -1,4 +1,4 @@
-% Data Acquisition Toolbox
+% Controller Acquisition Toolbox
 % Version 8.1 (R2013a) 06-Aug-2016
 %  
 % Dspace Acquisition
