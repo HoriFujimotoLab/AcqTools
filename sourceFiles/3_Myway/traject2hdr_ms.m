@@ -35,8 +35,8 @@ switch nargin
         fprintf(fid, '** ctp = %s : compression type: c=comp/n=no_comp \n', options.ctp);
         fprintf(fid, '** dtp = %s : signal type:      f=full/ O=odd-odd \n**                             o=odd / O2=special odd-odd\n', options.dtp);
         fprintf(fid, '** gtp = %s : grid type: l=linear/q=quasi-logarithmic \n', options.gtp);
-        fprintf(fid, '*/ \n\n');        
-
+        fprintf(fid, '*/ \n\n');
+        
         [num,den] = tfdata(minreal(Hampl),'v');
         fprintf(fid, '/* AMPLITUDE SPECTRUM \n');
         fprintf(fid, '** ----------------------- \n');
@@ -47,28 +47,53 @@ switch nargin
         fprintf(fid, '** den = [ ');
         fprintf(fid, '%e ', den);
         fprintf(fid, ']\n');
-        fprintf(fid, '*/ \n\n');  
+        fprintf(fid, '*/ \n\n');
 end
 
+if isfield(options,'ftp') == 0
+    options.ftp = 'm';
+end
 
-%name = strrep(file,'.h','');
-%array_name = strrep(name,'R','');
-%nrofs_name = upper(strrep(array_name,'ref',''));
-array_name = 'refvec';
-nrofs_name = 'NROFS';
-fprintf(fid,'#define %s %d \n', nrofs_name, nrofs);
-fprintf(fid,'far float %s [%s] = { \n',array_name,nrofs_name);
-
-j = 0;
-for i=1 : nrofs
-    fprintf(fid, '%.10f, ', signal(i));
-    j=j+1;
-    if j == 10
-        fprintf(fid, '\n'); j = 0;
+if strcmp(options.ftp, 'd') % double
+    array_name = ['refvec_' file(2:end-2)];
+    nrofs_name = ['NROFS_' file(2:end-2)];
+    fprintf(fid,'#define %s %d \n', nrofs_name, nrofs);
+    fprintf(fid,'double %s [%s] = { \n',array_name,nrofs_name);
+    
+    j = 0;
+    for i=1 : nrofs
+        fprintf(fid, '%.16f, ', signal(i));
+        j=j+1;
+        if j == 10
+            fprintf(fid, '\n'); j = 0;
+        end
     end
+    fprintf(fid,'}; \n');
+    fclose(fid);
+    
+elseif strcmp(options.stp, 'm') % float for myway
+    %name = strrep(file,'.h','');
+    %array_name = strrep(name,'R','');
+    %nrofs_name = upper(strrep(array_name,'ref',''));
+    array_name = 'refvec';
+    nrofs_name = 'NROFS';
+    fprintf(fid,'#define %s %d \n', nrofs_name, nrofs);
+    fprintf(fid,'far float %s [%s] = { \n',array_name,nrofs_name);
+    
+    j = 0;
+    for i=1 : nrofs
+        fprintf(fid, '%.10f, ', signal(i));
+        j=j+1;
+        if j == 10
+            fprintf(fid, '\n'); j = 0;
+        end
+    end
+    fprintf(fid,'}; \n');
+    fclose(fid);
+else
+    error('options.ftp: ''d'',''m''');
 end
-fprintf(fid,'}; \n');
-fclose(fid);
 
 path = strcat(folder,'\',file);
 end
+
