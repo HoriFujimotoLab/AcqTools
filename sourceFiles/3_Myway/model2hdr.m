@@ -17,9 +17,10 @@ else                model_name = {'model 1'};
 end
 for i=1:length(model_name)
     fprintf(fid,strcat('//',model_name{i},'\n'));
-    if isstruct(model), [matrix.A,matrix.B,matrix.C,matrix.D] = ssdata(model.(model_name{i}));
-    else                [matrix.A,matrix.B,matrix.C,matrix.D] = ssdata(model);
+    if isstruct(model), sys = balreal(model.(model_name{i}));
+    else                sys = balreal(model);
     end
+    [matrix.A,matrix.B,matrix.C,matrix.D] = ssdata(sys);
     matrix_name = fieldnames(matrix);
     
     % MATRIX: state-space data matrix
@@ -45,8 +46,20 @@ for i=1:length(model_name)
         end
         fprintf(fid,str,data);
     end
-    fprintf(fid,'\n');
     
+    % VECTOR: state-space state vector
+    matrix_size = size(matrix.(matrix_name{1}));
+    str = char(strcat('float\t','x',num2str(i),...
+                      '[',num2str(matrix_size(1)),']','\t \t={ \t'));
+    for m=1:matrix_size(1)
+        if m==1; str = strcat(str,'%.1e');
+        else     str = strcat(str,',%.1e');
+        end
+    end
+    str = strcat(str,'\t};\n'); 
+    data = zeros(matrix_size(1),1);
+    fprintf(fid,str,data);
+    fprintf(fid,'\n');
 end
 fprintf(fid,strcat('// https://github.com/HoriFujimotoLab/AcqTools \n'));
 fprintf(fid,strcat('// Thomas Beauduin, HFlab (University of Tokyo) \n'));
