@@ -16,7 +16,7 @@ if isstruct(model), model_name = fieldnames(model);
 else                model_name = {'model 1'};
 end
 for i=1:length(model_name)
-    fprintf(fid,strcat('//',model_name{i},'\n'));
+    fprintf(fid,strcat('//',model_name{i},' model','\n'));
     if isstruct(model), sys = balreal(model.(model_name{i}));
     else                sys = balreal(model);
     end
@@ -26,7 +26,7 @@ for i=1:length(model_name)
     % MATRIX: state-space data matrix
     for j=1:length(matrix_name)
         matrix_size = size(matrix.(matrix_name{j}));
-        str = char(strcat('float\t',matrix_name{j},num2str(i),...
+        str = char(strcat('float\t',matrix_name{j},model_name{i},...
                           '[',num2str(matrix_size(1)),']',...
                           '[',num2str(matrix_size(2)),']','\t='));
         for n=1:matrix_size(1)
@@ -49,8 +49,8 @@ for i=1:length(model_name)
     
     % VECTOR: state-space state vector
     matrix_size = size(matrix.(matrix_name{1}));
-    str = char(strcat('float\t','x',num2str(i),...
-                      '[',num2str(matrix_size(1)),']','\t \t={ \t'));
+    str = char(strcat('float\t','x',model_name{i},...
+                      '[',num2str(matrix_size(1)),']',' \t={ \t'));
     for m=1:matrix_size(1)
         if m==1; str = strcat(str,'%.1e');
         else     str = strcat(str,',%.1e');
