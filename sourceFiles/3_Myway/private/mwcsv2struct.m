@@ -15,7 +15,7 @@ function [struct,mname] = mwcsv2struct(cname,fs_dsp)
 % read csv file found on current path
 fid = fopen(cname, 'r');
 HDRS = textscan(fid,'%s%s%s%s%s%s%s%s%s',1, 'delimiter',',');
-DATA = textscan(fid,'%u%f%f%f%f%f%f%f%f','delimiter',',','HeaderLines',1);
+DATA = textscan(fid,'%d%f%f%f%f%f%f%f%f','delimiter',',','HeaderLines',1);
 fclose(fid);
 
 % PROCES
