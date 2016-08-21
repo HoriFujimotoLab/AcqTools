@@ -49,20 +49,21 @@ end
 % correct initial data loss from wave delay
 idx = find(strcmp([HDRS{:}], 'msr'));
 if DATA{idx}(1) ~= DATA{idx}(2)
-    for d=2:length(HDRS)
-        DATA{d}=[DATA{d}(1);DATA{d}(1:end)];
+    for d = 2:length(HDRS)
+        DATA{d} = [DATA{d}(1);DATA{d}(1:end)];
     end
 end
-k=DATA{idx}(1);
+msr_first = DATA{idx}(1);
 
 % DATA CORRECT
 % remove data addition from fs error
 % remove data loss from unsynchronisation
-cnt_m=zeros(nroft,1);
+cnt_m = zeros(nroft,1);
+k = msr_first;
 for i=1:nroft
-    cnt_m(i)=k;                 % reference counter
+    cnt_m(i) = k;               % reference counter
     if mod(i,srate)==0
-        k=k+1;
+        k = k + 1;
     end
 end
 
@@ -100,6 +101,16 @@ if srate == 2                   % downsample data
 end
 nroft = length(DATA{1});
 fs = round(double(1/((DATA{1}(2,1))*1e-6)));
+
+% TRIGGER CORRECTION
+% shift periods for trigger delay correction
+while msr_first > 1
+    for d=2:length(HDRS)
+        DATA{d} = [0; DATA{d}(1:nroft-1)];
+    end
+    DATA{idx}(1) = msr_first - 1;
+    msr_first = msr_first - 1;
+end
 
 % SAVE
 cells = [DATA,nroft,fs];

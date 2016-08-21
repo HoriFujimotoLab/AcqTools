@@ -71,7 +71,7 @@ if strcmp(options.ftp, 'd') % double
     fprintf(fid,'}; \n');
     fclose(fid);
     
-elseif strcmp(options.stp, 'm') % float for myway
+elseif strcmp(options.ftp, 'm') % float for myway
     %name = strrep(file,'.h','');
     %array_name = strrep(name,'R','');
     %nrofs_name = upper(strrep(array_name,'ref',''));
