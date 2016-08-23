@@ -1,4 +1,4 @@
-function [struct,mname] = mwcsv2struct(cname,fs_dsp)
+function [struct,mname] = mwcsv2struct(cname,fs_dsp,nrofdp)
 %MWCSV2STRUCT MyWay wave csv-file to data structure.
 %   [struct,mname] = mwcsv2struct(cname,fs_dsp)
 % cname     : directory and file name of csv file
@@ -42,7 +42,7 @@ srate = floor(fs_wave/fs_dsp);
 % correct time vector for required fs
 if mod(fs_wave,fs_dsp) ~= 0
     ts = 1e6/fs_dsp/srate;
-    DATA{1}=(0:ts:nroft/fs_dsp*1e6-ts)';
+    DATA{1} = (0:ts:nroft/fs_dsp*1e6-ts)';
 end
 
 % INIT CORRECT
@@ -54,6 +54,15 @@ if DATA{idx}(1) ~= DATA{idx}(2)
     end
 end
 msr_first = DATA{idx}(1);
+
+% REMOVE UNNECSSARY DATA
+% remove constant counter values
+if ~isnan(nrofdp)
+    nroft = nrofdp;
+    for d=2:length(HDRS)
+        DATA{d} = DATA{d}(1:nroft);
+    end
+end
 
 % DATA CORRECT
 % remove data addition from fs error
