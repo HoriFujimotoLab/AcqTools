@@ -3,34 +3,23 @@ function [mname] = myway2mat(fs_dsp,varargin)
 %   [mnm] = msr2mat(fs_dsp)
 % fs_dsp : sampling freq of dsp controller [Hz]
 % varargin:
-%  <> cnt_name  : measurement correction counter name
-%  <> nrofdp    : number of data points to keep 
-%  (only needed if not 'msr' if less then total)
+%  <> cname: correction counter name (default: msr)
 % mnm    : name of created data mat-file [string]
 % author : Thomas Beauduin, University of Tokyo, 2015
 
 nVarargs = length(varargin);
 switch nVarargs
-    case 0, cnt_name = 'msr'; nrofdp = NaN;
-    case 1, 
-        if ischar(varargin{1}), 
-            cnt_name = varargin{1}; nrofdp = NaN;
-        else
-            nrofdp = varargin{1}; cnt_name = 'msr';
-        end
-    case 2,
-        if ischar(varargin{1}), 
-            cnt_name = varargin{1}; nrofdp = varargin{2};
-        else
-            cnt_name = varargin{2}; nrofdp = varargin{1};
-        end
+    case 0,     cname = 'msr';
+    case 1,     cname = varargin{1};
+    otherwise,  error('too much inputs')
 end
 W=[]; T=[]; R=[]; P=[]; A=[];
+
 % WAVE MSR DATA
 % extract wave data file from current folder (W*.csv)
 wcsv = dir(strcat(pwd,'\','W*.csv'));
 if exist(wcsv.name,'file') ~= 0
-    [W,mname] = mwcsv2struct(strcat(pwd,'\',wcsv.name),fs_dsp,nrofpd);
+    [W,mname] = mwcsv2struct(strcat(pwd,'\',wcsv.name),fs_dsp,cname);
 end
 
 % TRC MSR DATA

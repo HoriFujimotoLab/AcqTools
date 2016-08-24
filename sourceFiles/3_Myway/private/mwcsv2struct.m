@@ -1,8 +1,9 @@
-function [struct,mname] = mwcsv2struct(cname,fs_dsp,nrofdp)
+function [struct,mname] = mwcsv2struct(fname,fs_dsp,cname)
 %MWCSV2STRUCT MyWay wave csv-file to data structure.
 %   [struct,mname] = mwcsv2struct(cname,fs_dsp)
-% cname     : directory and file name of csv file
+% fname     : directory and file name of csv file
 % fs_dsp    : sampling freq of dsp controller [Hz]
+% cname     : counter header name
 % struct    : time & measurement data vectors in structure
 % mname     : directory and file name of mat file
 % algorithm : low level file I/O to create data structure 
@@ -13,7 +14,7 @@ function [struct,mname] = mwcsv2struct(cname,fs_dsp,nrofdp)
 
 % READ
 % read csv file found on current path
-fid = fopen(cname, 'r');
+fid = fopen(fname, 'r');
 s = '%s'; f = '%d';
 for i=1:8, s = strcat(s,'%s'); f = strcat(f,'%f'); end
 HDRS = textscan(fid,s,1, 'delimiter',',');
@@ -47,7 +48,7 @@ end
 
 % INIT CORRECT
 % correct initial data loss from wave delay
-idx = find(strcmp([HDRS{:}], 'msr'));
+idx = find(strcmp([HDRS{:}], cname));
 if DATA{idx}(1) ~= DATA{idx}(2)
     for d = 2:length(HDRS)
         DATA{d} = [DATA{d}(1);DATA{d}(1:end)];
@@ -57,12 +58,11 @@ msr_first = DATA{idx}(1);
 
 % REMOVE UNNECSSARY DATA
 % remove constant counter values
-if ~isnan(nrofdp)
-    nroft = nrofdp;
-    for d=2:length(HDRS)
-        DATA{d} = DATA{d}(1:nroft);
-    end
+nroft = find(DATA{idx}==max(DATA{idx}),1) + 1;
+for d=2:length(HDRS)
+    DATA{d} = DATA{d}(1:nroft);
 end
+
 
 % DATA CORRECT
 % remove data addition from fs error
@@ -125,6 +125,6 @@ end
 cells = [DATA,nroft,fs];
 fields = [HDRS{:},'nroft','fs'];
 struct = cell2struct(cells,fields,2);
-mname = strrep(cname, '.csv', '.mat');
+mname = strrep(fname, '.csv', '.mat');
 mname = strrep(mname, 'W', 'D');
 end
