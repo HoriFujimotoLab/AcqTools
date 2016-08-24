@@ -46,23 +46,22 @@ if mod(fs_wave,fs_dsp) ~= 0
     DATA{1} = (0:ts:nroft/fs_dsp*1e6-ts)';
 end
 
+% REMOVE UNNECSSARY DATA
+% remove constant counter values
+idx = find(strcmp([HDRS{:}], cname));
+nroft = roundx(find(DATA{idx}==max(DATA{idx}),1)+1,-2)
+for d=2:length(HDRS)
+    DATA{d} = DATA{d}(1:nroft);
+end
+
 % INIT CORRECT
 % correct initial data loss from wave delay
-idx = find(strcmp([HDRS{:}], cname));
 if DATA{idx}(1) ~= DATA{idx}(2)
     for d = 2:length(HDRS)
         DATA{d} = [DATA{d}(1);DATA{d}(1:end)];
     end
 end
 msr_first = DATA{idx}(1);
-
-% REMOVE UNNECSSARY DATA
-% remove constant counter values
-nroft = find(DATA{idx}==max(DATA{idx}),1) + 1;
-for d=2:length(HDRS)
-    DATA{d} = DATA{d}(1:nroft);
-end
-
 
 % DATA CORRECT
 % remove data addition from fs error
@@ -75,7 +74,6 @@ for i=1:nroft
         k = k + 1;
     end
 end
-
 for i=1:nroft
     if DATA{idx}(i) < cnt_m(i)  % shift left
         for d=2:length(HDRS)
@@ -115,7 +113,7 @@ fs = round(double(1/((DATA{1}(2,1))*1e-6)));
 % shift periods for trigger delay correction
 while msr_first > 1
     for d=2:length(HDRS)
-        DATA{d} = [0; DATA{d}(1:nroft-1)];
+        DATA{d} = [DATA{d}(1); DATA{d}(1:nroft-1)];
     end
     DATA{idx}(1) = msr_first - 1;
     msr_first = msr_first - 1;

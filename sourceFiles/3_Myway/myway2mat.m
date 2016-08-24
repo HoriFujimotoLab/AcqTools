@@ -13,8 +13,8 @@ switch nVarargs
     case 1,     cname = varargin{1};
     otherwise,  error('too much inputs')
 end
-W=[]; T=[]; R=[]; P=[]; A=[];
 
+W=[]; T=[]; R=[]; P=[]; A=[];
 % WAVE MSR DATA
 % extract wave data file from current folder (W*.csv)
 wcsv = dir(strcat(pwd,'\','W*.csv'));
