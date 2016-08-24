@@ -1,10 +1,10 @@
 function [path] = traject2hdr(signal,folder,file,array_name)
 %REF2HDR Export reference vector to c# myway header file.
-%   [path] = traject2hdr(signal,folder,file,array_name)
+%   [path] = traject2hdr(signal, folder, file, array_name)
 % signal    : reference vector
-% folder    : subfolder from current path
+% folder    : subfolder from current path 
 % file      : name of header file, required format: R...ref.h
-% array_name: name of array
+% array_name: name of array in C-code (optional) : refvec[NROF]
 % Algorithm : low level file I/O to create header for
 %             MyWay PE-Expert3 system (MWPE-C6713A DSP)
 % Author    : Thomas Beauduin, University of Tokyo
@@ -16,7 +16,8 @@ if nargin < 4
 end
 
 nrofs = size(signal,1);
-fid = fopen(strcat(folder,file),'w');
+
+fid = fopen(strcat(folder,file),'w'); % file open
 %name = strrep(file,'.h','');
 %array_name = strrep(name,'R','');
 %nrofs_name = upper(strrep(array_name,'ref',''));
@@ -33,8 +34,9 @@ for i=1 : nrofs
         fprintf(fid, '\n'); j = 0;
     end
 end
-fprintf(fid,'}; \n');
-fclose(fid);
+fprintf(fid,'}; \n'); 
+
+fclose(fid); %file closed
 
 path = strcat(pwd,'\',file);
 end
