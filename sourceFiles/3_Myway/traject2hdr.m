@@ -1,3 +1,4 @@
+function [path] = traject2hdr(signal,folder,file,format_name,array_name)
 %REF2HDR Export reference vector to c# myway header file.
 %   [path] = traject2hdr(signal, folder, file, array_name)
 % signal    : reference vector
