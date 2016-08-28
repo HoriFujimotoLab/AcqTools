@@ -37,7 +37,7 @@ fprintf(fid,[format_name ' %s [%s] = { \n'],array_name,nrofs_name);
 j = 0;
 for i=1 : nrofs
     if isempty(strfind(format_name,'int')) == 1
-        fprintf(fid, '%.10e, ', signal(i));
+        fprintf(fid, '%.14f, ', signal(i));
     else
         fprintf(fid, '%d, ', round(signal(i)));
     end
