@@ -6,10 +6,10 @@ function [struct,mname] = mwcsv2struct(fname,fs_dsp,cname)
 % cname     : counter header name
 % struct    : time & measurement data vectors in structure
 % mname     : directory and file name of mat file
-% algorithm : low level file I/O to create data structure 
-%             from MyWay PE-Expert3 wave system with wave-data 
+% algorithm : low level file I/O to create data structure
+%             from MyWay PE-Expert3 wave system with wave-data
 %             loss and fluctuation correction
-% author    : Thomas Beauduin, University of Tokyo, 2015 
+% author    : Thomas Beauduin, University of Tokyo, 2015
 %%%%%
 
 % READ
@@ -94,7 +94,7 @@ for d=2:length(HDRS)            % remove fake data
     DATA{d}=DATA{d}(1:nroft);
 end
 if srate == 2                   % downsample data
-    DATA_2 = cell(size(HDRS));      
+    DATA_2 = cell(size(HDRS));
     for d=1:length(HDRS)
         DATA_2{1,d}=zeros(nroft/2,1); k=1;
         for i=1:nroft
@@ -124,5 +124,7 @@ cells = [DATA,nroft,fs];
 fields = [HDRS{:},'nroft','fs'];
 struct = cell2struct(cells,fields,2);
 mname = strrep(fname, '.csv', '.mat');
-mname = strrep(mname, 'W', 'D');
+mname2 = strsplit(mname,'\');
+mname3 = strrep(mname2(end), 'W', 'D');
+mname = strrep(mname, char(mname2(end)), char(mname3));
 end
