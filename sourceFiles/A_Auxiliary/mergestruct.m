@@ -30,7 +30,8 @@ if nrofs > 1
     if numel(data_nu) ~= numel(data_n),
         data_c = data_c(idx,:) ;
         data_n = data_n(idx,:) ;
-        disp('catstruct: Fieldnames not unique between structures.');
+        fprintf(strcat('Warning: Fieldnames not unique between structures,\n\t \t',...
+                       ' so probably data lost in mergestruct. \n'));
     end
 end
 Y = cell2struct(data_c,data_n,1);
