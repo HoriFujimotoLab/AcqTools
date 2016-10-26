@@ -45,14 +45,7 @@ if mod(fs_wave,fs_dsp) ~= 0
     ts = 1e6/fs_dsp/srate;
     DATA{1} = (0:ts:nroft/fs_dsp*1e6-ts)';
 end
-
-% REMOVE UNNECSSARY DATA
-% remove constant counter values
 idx = find(strcmp([HDRS{:}], cname));
-nroft = roundx(find(DATA{idx}==max(DATA{idx}),1)+1,-2)
-for d=2:length(HDRS)
-    DATA{d} = DATA{d}(1:nroft);
-end
 
 % INIT CORRECT
 % correct initial data loss from wave delay
@@ -74,11 +67,13 @@ for i=1:nroft
         k = k + 1;
     end
 end
+j=1; loss=0; fake=0;
 for i=1:nroft
     if DATA{idx}(i) < cnt_m(i)  % shift left
         for d=2:length(HDRS)
             DATA{d}=[DATA{d}(1:i-1);DATA{d}(i+1:end)];
         end
+        fake = fake + 1;
     end
     if DATA{idx}(i) > cnt_m(i)  % shift right
         for d=2:length(HDRS)
@@ -88,9 +83,19 @@ for i=1:nroft
                 DATA{d}=[DATA{d}(1:i-1);DATA{d}(i-1);DATA{d}(i:end)];
             end
         end
+        loss = loss + 1;
+    end
+    if j > 0.1*nroft            % report progress
+        fprintf('Progress: %g%% ... removed: %g, repaired: %g \n',...
+                 round(100*i/nroft),fake, loss)
+         j = 0;
+    else j = j+1;
     end
 end
-for d=2:length(HDRS)            % remove fake data
+fprintf('Completed!\n excess data removed: %g, lost data repaired: %g\n\n',...
+         fake, loss)
+
+for d=2:length(HDRS)            % remove excess data
     DATA{d}=DATA{d}(1:nroft);
 end
 if srate == 2                   % downsample data
