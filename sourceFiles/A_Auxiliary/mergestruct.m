@@ -25,13 +25,21 @@ for ii=1:nargin,
     end
 end
 
+% improve by printing the name of the repeated arrays
 if nrofs > 1
-    [data_nu,idx] = unique(data_n,'last');
+    [data_nu,idx1,idx2] = unique(data_n,'last');
+    idx_rep = setdiff(idx2,idx1);
     if numel(data_nu) ~= numel(data_n),
-        data_c = data_c(idx,:) ;
-        data_n = data_n(idx,:) ;
-        fprintf(strcat('Warning: Fieldnames not unique between structures,\n\t \t',...
-                       ' so probably data lost in mergestruct. \n'));
+        data_c = data_c(idx1,:);
+        data_n = data_n(idx1,:);
+        %for i=1:length(idx_rep)
+        %    test = data_n{idx_rep(i)}
+            %isa(test,'array')
+            %fprintf();
+            %fprintf(strcat('Warning: repeated fieldnames:\n\t\t',...
+            %                data_n(idx_rep),...
+            %               'so probably data lost in mergestruct. \n'));
+        %end
     end
 end
 Y = cell2struct(data_c,data_n,1);
