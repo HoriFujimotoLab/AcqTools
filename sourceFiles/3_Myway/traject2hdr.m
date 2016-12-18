@@ -1,54 +1,42 @@
-function [path] = traject2hdr(signal,folder,file,format_name,array_name)
+function [path] = traject2hdr(vec, file, res, nm_vec)
 %REF2HDR Export reference vector to c# myway header file.
-%   [path] = traject2hdr(signal, folder, file, array_name)
-% signal    : reference vector
-% folder    : subfolder from current path
-% file      : name of header file, required format: R...ref.h
-% format_name: format name (optional), default: 'far float'
-% array_name: name of array in C-code (optional), default : refvec[NROF]
-% Algorithm : low level file I/O to create header for
-%             MyWay PE-Expert3 system (MWPE-C6713A DSP)
-% Author    : Thomas Beauduin, University of Tokyo
-%             Hori-Fujimoto lab, 08 March 2015
+%   
+% vec    : reference vector
+% file   : name of header file, required format: R..._ref.h
+% nm_vec : name of array in C-code (optional), default : refvec[NROF]
+% Author : Thomas Beauduin, University of Tokyo
+%          Hori-Fujimoto lab, December 2016
 %%%%%
+if ~iscell(vec), vec{1} = vec;          end
+if nargin < 3, res = '%.10f, ';         end
+if nargin < 4, nm_vec{1} = 'refvec';    end
+if ~iscell(nm_vec), nm_vec{1} = nm_vec; end
+nm_format = 'far float';
+nm_nrofs = 'NROFS';
 
-if nargin < 4
-    format_name = 'far float';
-end
+fid = fopen(file,'w');
+nrofs = length(vec{1});
+fprintf(fid,'#define %s %d \n', nm_nrofs, nrofs);
 
-if nargin < 5
-    array_name = 'refvec';
-    nrofs_name = 'NROFS';
-else
-    nrofs_name = ['NROFS_' array_name];
-end
+nrofd = length(vec);
+for d=1:nrofd
+    fprintf(fid,[nm_format ' %s [%s] = { \n'],nm_vec{d},nm_nrofs);
 
-
-nrofs = size(signal,1);
-
-fid = fopen(strcat(folder,file),'w'); % file open
-%name = strrep(file,'.h','');
-%array_name = strrep(name,'R','');
-%nrofs_name = upper(strrep(array_name,'ref',''));
-%array_name = 'refvec';
-fprintf(fid,'#define %s %d \n', nrofs_name, nrofs);
-fprintf(fid,[format_name ' %s [%s] = { \n'],array_name,nrofs_name);
-
-j = 0;
-for i=1 : nrofs
-    if isempty(strfind(format_name,'int')) == 1
-        fprintf(fid, '%.14f, ', signal(i));
-    else
-        fprintf(fid, '%d, ', round(signal(i)));
+    j = 1;
+    for i=1:nrofs-1
+        if strfind(res,'f'), fprintf(fid, res, vec{d}(i));
+        else                 fprintf(fid, res, round(vec{d}(i)));
+        end
+        if j == 10,          fprintf(fid, '\n'); j = 0; end
+        j=j+1;
     end
-    j=j+1;
-    if j == 10
-        fprintf(fid, '\n'); j = 0;
+    res_e = strrep(res,',','');
+    if strfind(res,'f'), fprintf(fid, res_e, vec{d}(nrofs));
+    else                 fprintf(fid, res_e, round(vec{d}(nrofs)));
     end
+    fprintf(fid,'\n }; \n \n');
 end
-fprintf(fid,'}; \n');
+fclose(fid);
 
-fclose(fid); %file closed
-
-path = strcat(pwd,'\',file);
+path = file;
 end
