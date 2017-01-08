@@ -15,7 +15,9 @@ fclose(fid);
 % PROCES
 nrofs = length(data{1});
 fname = strrep(fname, '.h', '.mat');
-rname = strrep(fname, 'I', 'R');
+rname2 = strsplit(fname,'\');
+rname3 = strrep(rname2(end), 'I', 'R');
+rname = strrep(rname, char(rname2(end)), char(rname3));
 
 % SAVE
 cell = [data,nrofs];

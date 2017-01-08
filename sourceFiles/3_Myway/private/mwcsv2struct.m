@@ -129,5 +129,8 @@ cells = [DATA,nroft,fs];
 fields = [HDRS{:},'nroft','fs'];
 struct = cell2struct(cells,fields,2);
 mname = strrep(fname, '.csv', '.mat');
-mname = strrep(mname, 'W', 'D');
+mname2 = strsplit(mname,'\');
+mname3 = strrep(mname2(end), 'W', 'D');
+mname = strrep(mname, char(mname2(end)), char(mname3));
+
 end
