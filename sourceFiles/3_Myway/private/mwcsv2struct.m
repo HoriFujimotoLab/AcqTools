@@ -128,6 +128,7 @@ end
 cells = [DATA,nroft,fs];
 fields = [HDRS{:},'nroft','fs'];
 struct = cell2struct(cells,fields,2);
+struct.time = struct.time*1e-6; % usec to sec
 mname = strrep(fname, '.csv', '.mat');
 mname2 = strsplit(mname,'\');
 mname3 = strrep(mname2(end), 'W', 'D');
