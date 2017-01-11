@@ -1,4 +1,4 @@
-function [path] = traject2hdr(vec, file, res, nm_vec)
+function [path] = traject2hdr(inp, file, res, nm_vec)
 %REF2HDR Export reference vector to c# myway header file.
 %   
 % vec    : reference vector
@@ -7,7 +7,8 @@ function [path] = traject2hdr(vec, file, res, nm_vec)
 % Author : Thomas Beauduin, University of Tokyo
 %          Hori-Fujimoto lab, December 2016
 %%%%%
-if ~iscell(vec), vec{1} = vec;          end
+if ~iscell(inp), vec{1} = inp;
+else             vec = inp;             end
 if nargin < 3, res = '%.10f, ';         end
 if nargin < 4, nm_vec{1} = 'refvec';    end
 if ~iscell(nm_vec), nm_vec{1} = nm_vec; end
