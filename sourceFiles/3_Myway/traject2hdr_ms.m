@@ -10,6 +10,11 @@ function [path] = traject2hdr_ms(signal,folder,file,harm, Hampl, options)
 %             Wataru Ohnishi, University of Tokyo
 %             Hori-Fujimoto lab, 08 March 2015
 %%%%%
+% NOTE:
+% in further releases this function will be removed
+% and replaced by a description-making-function to
+% include as optional field to the data strucutre in
+% the more general function: traject2hdr.m
 fid = fopen(strcat(folder,file),'w');
 nrofs = size(signal,1);
 
