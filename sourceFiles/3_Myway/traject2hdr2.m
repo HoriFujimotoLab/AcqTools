@@ -24,7 +24,6 @@ for i=1:nargin
         fid = fopen(file,'w');
         nrofs = length(varargin{1}.vec);
         fprintf(fid,d.cmt);
-        
         fprintf(fid,'#define NROFS %d \n', nrofs);
     end
     
@@ -54,4 +53,5 @@ function [d] = defaults(d)
     if ~isfield(d,'fmt'), d.fmt = 'far float';  end
     if ~isfield(d,'vnm'), d.vnm = 'test';       end
     if ~isfield(d,'fnm'), d.fnm = pwd;          end
+    if ~isfield(d,'cmt'), d.cmt = '';           end
 end
