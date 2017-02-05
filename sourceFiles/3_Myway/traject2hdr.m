@@ -7,12 +7,17 @@ function [path] = traject2hdr(inp, file, res, nm_vec)
 % Author : Thomas Beauduin, University of Tokyo
 %          Hori-Fujimoto lab, December 2016
 %%%%%
+% change cell to structure  => data struct
+% add format options        => options struct
+% path = traject2hdr(data, file, options);
+% see multisine design for reference
+%%%%%
 if ~iscell(inp), vec{1} = inp;
-else             vec = inp;             end
-if nargin < 3, res = '%.10f, ';         end
-if nargin < 4, nm_vec{1} = 'refvec';    end
-if ~iscell(nm_vec), nm_vec{1} = nm_vec; end
-nm_format = 'far float';
+else             vec = inp;                 end
+if nargin < 3, res = '%.10f, ';             end
+if nargin < 4, nm_vec{1} = 'refvec';        end
+if nargin < 5, nm_format{1} = 'far float';  end
+if ~iscell(nm_vec), nm_vec{1} = nm_vec;     end
 nm_nrofs = 'NROFS';
 
 fid = fopen(file,'w');
