@@ -1,4 +1,4 @@
-function [path] = traject2hdr(inp, file, res, nm_vec)
+function [path] = traject2hdr(inp, file, res, nm_vec, nm_format)
 %REF2HDR Export reference vector to c# myway header file.
 %   
 % vec    : reference vector
@@ -23,23 +23,24 @@ nm_nrofs = 'NROFS';
 fid = fopen(file,'w');
 nrofs = length(vec{1});
 fprintf(fid,'#define %s %d \n', nm_nrofs, nrofs);
-
 nrofd = length(vec);
 for d=1:nrofd
-    fprintf(fid,[nm_format ' %s [%s] = { \n'],nm_vec{d},nm_nrofs);
+    fprintf(fid,[nm_format{d} ' %s [%s] = { \n'],nm_vec{d},nm_nrofs);
 
     j = 1;
     for i=1:nrofs-1
-        if strfind(res,'f'), fprintf(fid, res, vec{d}(i));
-        else                 fprintf(fid, res, round(vec{d}(i)));
+        if strfind(res{d},'f'), fprintf(fid, res{d}, vec{d}(i));
+        else                 fprintf(fid, res{d}, round(vec{d}(i)));
         end
+        fprintf(fid, ',');
         if j == 10,          fprintf(fid, '\n'); j = 0; end
         j=j+1;
     end
-    res_e = strrep(res,',','');
-    if strfind(res,'f'), fprintf(fid, res_e, vec{d}(nrofs));
+    res_e = strrep(res{d},',','');
+    if strfind(res{d},'f'), fprintf(fid, res_e, vec{d}(nrofs));
     else                 fprintf(fid, res_e, round(vec{d}(nrofs)));
     end
+    fprintf(fid, ',');
     fprintf(fid,'\n }; \n \n');
 end
 fclose(fid);
