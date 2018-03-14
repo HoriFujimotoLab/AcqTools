@@ -21,6 +21,16 @@ HDRS = textscan(fid,s,1, 'delimiter',',');
 DATA = textscan(fid,f,'delimiter',',','HeaderLines',1);
 fclose(fid);
 
+% PRE-PROCES for MSR
+[~,idx] = min(abs(DATA{2}(end)-1-DATA{2}));
+idx = floor(idx/2+1)*2+1;
+if length(DATA{1}) ~= idx
+   warning('msr ~= idx'); 
+end
+for k = 1:length(DATA)
+    DATA{k} = DATA{k}(1:idx);
+end
+
 % PROCES
 % process header names back to wave names
 nroft_wave = length(DATA{1})-1;
