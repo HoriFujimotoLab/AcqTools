@@ -51,10 +51,10 @@ srate = floor(fs_wave/fs_dsp);
 
 % TIME CORRECT
 % correct time vector for required fs
-if mod(fs_wave,fs_dsp) ~= 0
-    ts = 1e6/fs_dsp/srate;
-    DATA{1} = (0:ts:nroft/fs_dsp*1e6-ts)';
-end
+% if mod(fs_wave,fs_dsp) ~= 0
+%     ts = 1e6/fs_dsp/srate;
+%     DATA{1} = (0:ts:nroft/fs_dsp*1e6-ts)';
+% end
 idx = find(strcmp([HDRS{:}], cname));
 
 % INIT CORRECT
